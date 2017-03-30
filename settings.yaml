@@ -1,0 +1,20 @@
+jira:
+    url: https://jira.company/
+    user: emailr@domain
+    pass: secret
+smtp:
+    host: smtp.mail.ru
+    port: 465
+    user: email@domain
+    pass: secret
+team:
+  - mail: user1@domain
+    name: Vasily Pupkin
+  - mail: user2@domain
+    name: Vasily Pupkin
+  - mail: user3@domain
+    name: Vasily Pupkin
+email:
+    title: "[Mailing-list] Worklog for %s"
+    from: email@domain
+    to: maillist@domain
