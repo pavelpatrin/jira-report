@@ -1,7 +1,6 @@
 # coding: utf-8
 
 import datetime
-import collections
 import jira
 import settings
 import collector
@@ -30,7 +29,13 @@ def report():
     # Получение work-логов по найденным задачам
     team_worklogs = {}
     for issue in workon_issues:
-        worklogs = jira_collector.get_issue_worklogs(issue['key'])
+        issue_key = issue['key']
+
+        # Получение work-логов по задаче на дату
+        worklogs = jira_collector.get_issue_worklogs(
+            issue_key,
+            report_date
+        )
 
         for worklog in worklogs:
             # Группировка work-логов автора
@@ -38,7 +43,6 @@ def report():
             author_worklogs = team_worklogs.setdefault(author_mail, {})
 
             # Группировка work-логов автора по задаче
-            issue_key = issue['key']
             issue_worklogs = author_worklogs.setdefault(issue_key, {
                 'issue': issue,
                 'comments': [],

@@ -1,5 +1,7 @@
 # coding: utf-8
 
+import dateutil.parser as parser
+
 
 class Collector(object):
     def __init__(self, jira):
@@ -17,17 +19,28 @@ class Collector(object):
         }
         issues = self.jira.search_issues(jql)
 
-        return [{
-            'key': issue.key,
-            'url': issue.permalink(),
-            'title': issue.fields.summary,
-        } for issue in issues]
+        return [
+            {
+                'key': issue.key,
+                'url': issue.permalink(),
+                'title': issue.fields.summary,
+            }
+            for issue in issues
+        ]
 
-    def get_issue_worklogs(self, key):
+    def get_issue_worklogs(self, key, date):
         worklogs = self.jira.worklogs(key)
-        return [{
-            'author': {
-                'mail': worklog.author.key
-            },
-            'comment': worklog.comment,
-        } for worklog in worklogs]
+        return [
+            {
+                'author': {
+                    'mail': worklog.author.key
+                },
+                'comment': worklog.comment,
+            }
+            for worklog in worklogs
+            if self._worklog_at(worklog, date)
+        ]
+
+    def _worklog_at(self, worklog, date):
+        started = parser.parse(worklog.started)
+        return started.date() == date

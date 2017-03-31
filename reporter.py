@@ -30,6 +30,9 @@ class Reporter(object):
                 {% for comment in worklog.comments %}
                 {% if comment %}
                 {{ comment | nl2br }}
+                {% if not loop.last	%}
+                <br>
+                {% endif %}
                 {% endif %}
                 {% endfor %}
             </li>
