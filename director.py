@@ -10,7 +10,7 @@ import sender
 
 def report():
     # Дата формирования отчёта - вчера
-    report_date = datetime.date.today() - datetime.timedelta(days=1)
+    report_date = datetime.date.today() - datetime.timedelta(days=settings.DAY_DELTA)
     date_title = report_date.strftime('%Y-%m-%d')
 
     jira_client = jira.JIRA(settings.JIRA_URL, basic_auth=(
