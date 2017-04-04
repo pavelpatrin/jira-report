@@ -7,15 +7,16 @@ class Collector(object):
     def __init__(self, jira):
         self.jira = jira
 
-    def get_workon_issues(self, date, team):
+    def get_workon_issues(self, project, authors, date):
         jql = (
-            'project = TRG AND '
+            'project = %(project)s AND '
             'worklogDate = "%(date)s" '
             'AND timespent > 0 '
             'AND worklogAuthor IN (%(authors)s)'
         ) % {
+            'project': project,
             'date': date.strftime('%Y-%m-%d'),
-            'authors': ', '.join('"%s"' % x for x in team),
+            'authors': ', '.join('"%s"' % x for x in authors),
         }
         issues = self.jira.search_issues(jql)
 

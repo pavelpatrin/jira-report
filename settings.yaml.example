@@ -4,6 +4,7 @@ jira:
     url: https://jira.company/
     user: emailr@domain
     pass: secret
+    project: PROJECT-NAME
 smtp:
     host: smtp.mail.ru
     port: 465

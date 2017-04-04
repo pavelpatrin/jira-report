@@ -22,8 +22,9 @@ def report():
     jira_collector = collector.Collector(jira_client)
     jira_authors = [x[1] for x in settings.TEAM]
     workon_issues = jira_collector.get_workon_issues(
-        report_date,
+        settings.JIRA_PROJECT,
         jira_authors,
+        report_date,
     )
 
     # Получение work-логов по найденным задачам

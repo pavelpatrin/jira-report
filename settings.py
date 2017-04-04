@@ -15,6 +15,7 @@ DAY_DELTA = config['report']['day']
 JIRA_URL = config['jira']['url']
 JIRA_USER = config['jira']['user']
 JIRA_PASS = config['jira']['pass']
+JIRA_PROJECT = config['jira']['project']
 
 # SMTP settings
 SMTP_HOST = config['smtp']['host']
