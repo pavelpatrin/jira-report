@@ -9,7 +9,7 @@ import sender
 
 
 def report():
-    # Дата формирования отчёта - вчера
+    # Дата формирования отчёта
     report_date = datetime.date.today() - datetime.timedelta(days=settings.DAY_DELTA)
     date_title = report_date.strftime('%Y-%m-%d')
 
