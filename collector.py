@@ -7,18 +7,19 @@ class Collector(object):
     def __init__(self, jira):
         self.jira = jira
 
-    def get_workon_issues(self, project, authors, date):
-        jql = (
-            'project = %(project)s AND '
-            'worklogDate = "%(date)s" '
+    def get_workon_issues(self, project, authors, date_from, date_to):
+        issues = self.jira.search_issues((
+            'project = %(project)s '
+            'AND worklogDate >= "%(date_from)s" '
+            'AND worklogDate <= "%(date_to)s" '
             'AND timespent > 0 '
             'AND worklogAuthor IN (%(authors)s)'
         ) % {
             'project': project,
-            'date': date.strftime('%Y-%m-%d'),
+            'date_from': date_from.strftime('%Y-%m-%d'),
+            'date_to': date_to.strftime('%Y-%m-%d'),
             'authors': ', '.join('"%s"' % x for x in authors),
-        }
-        issues = self.jira.search_issues(jql)
+        })
 
         return [
             {
@@ -29,7 +30,7 @@ class Collector(object):
             for issue in issues
         ]
 
-    def get_issue_worklogs(self, key, date):
+    def get_issue_worklogs(self, key, date_from, date_to):
         worklogs = self.jira.worklogs(key)
         return [
             {
@@ -39,9 +40,13 @@ class Collector(object):
                 'comment': worklog.comment,
             }
             for worklog in worklogs
-            if self._worklog_at(worklog, date)
+            if self._worklog_at(
+                worklog,
+                date_from,
+                date_to,
+            )
         ]
 
-    def _worklog_at(self, worklog, date):
+    def _worklog_at(self, worklog, date_from, date_to):
         started = parser.parse(worklog.started)
-        return started.date() == date
+        return date_from <= started.date() <= date_to

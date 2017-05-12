@@ -1,5 +1,3 @@
-report:
-    day: 1
 jira:
     url: https://jira.company/
     user: emailr@domain

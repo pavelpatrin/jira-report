@@ -8,9 +8,6 @@ CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'settings.yaml')
 with open(CONFIG_PATH, 'r') as fh:
     config = yaml.load(fh)
 
-# General settings
-DAY_DELTA = config['report']['day']
-
 # Jira settings
 JIRA_URL = config['jira']['url']
 JIRA_USER = config['jira']['user']
