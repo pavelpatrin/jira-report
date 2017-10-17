@@ -22,4 +22,6 @@ accounts:
   - account: user2@domain
     title: Vasily Pupkin2
 language:
-  active: Work with issue
+    active: Work with issue.
+    comment: Discussion.
+    review: Code review.
