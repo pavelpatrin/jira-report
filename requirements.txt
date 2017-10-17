@@ -1,3 +1,6 @@
-yaml
-jira
-jinja
+Jinja2==2.9.6
+jira==1.0.10
+lxml==4.1.0
+PyYAML==3.12
+python-dateutil==2.6.1
+requests==2.18.4

@@ -1,21 +1,25 @@
 jira:
-    url: https://jira.company/
+    url: https://jira.company
     user: emailr@domain
     pass: secret
-    project: PROJECT-NAME
 smtp:
     host: smtp.mail.ru
     port: 465
     user: email@domain
     pass: secret
-team:
-  - mail: user1@domain
-    name: Vasily Pupkin
-  - mail: user2@domain
-    name: Vasily Pupkin
-  - mail: user3@domain
-    name: Vasily Pupkin
 email:
-    title: "[Mailing-list] Worklog for %s"
+    title: "[Mailing-list] Worklog for %(date_from)s - %(date_to)s"
     from: email@domain
     to: maillist@domain
+projects:
+  - project: PROJ1
+    title: Проект 1
+  - project: PROJ2
+    title: Проект 2
+accounts:
+  - account: user1@domain
+    title: Vasily Pupkin1
+  - account: user2@domain
+    title: Vasily Pupkin2
+language:
+  active: Work with issue
