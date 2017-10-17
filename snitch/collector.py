@@ -82,14 +82,14 @@ class Collector(object):
         results = []
         stream = lxml.etree.fromstring(response.content)
         for element in query(stream, '/feed:feed/feed:entry', False):
-            key_object = query(element, 'activity:object/feed:title/text()')
             key_target = query(element, 'activity:target/feed:title/text()')
-            project = utils.split_key(key_object or key_target)[0]
+            key_object = query(element, 'activity:object/feed:title/text()')
+            project = utils.split_key(key_target or key_object)[0]
             if project in projects:
-                title_object = query(element, 'activity:object/feed:summary/text()')
                 title_target = query(element, 'activity:target/feed:summary/text()')
+                title_object = query(element, 'activity:object/feed:summary/text()')
                 results.append({
-                    'key': key_object or key_target,
+                    'key': key_target or key_object,
                     'title': title_object or title_target,
                     'action': query(element, 'feed:category/@term'),
                 })
