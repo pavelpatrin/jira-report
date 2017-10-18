@@ -13,10 +13,9 @@ email:
     to: maillist@domain
 projects:
   - project: PROJ1
-    title: Проект 1
+    title: Project 1
   - project: PROJ2
-    title: Проект 2
-accounts:
+    title: Project 2
   - account: user1@domain
     title: Vasily Pupkin1
   - account: user2@domain

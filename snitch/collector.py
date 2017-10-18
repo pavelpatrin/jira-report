@@ -25,25 +25,32 @@ class Collector(object):
         history = collections.OrderedDict()
         for account in accounts:
             history[account] = {
-                'active': self._active(account, projects, date_from, date_to),
-                'stream': self._stream(account, projects, date_from, date_to),
-                'workon': self._workon(account, projects, date_from, date_to),
+                'active': self._query_status('active', account, projects, date_from, date_to),
+                'review': self._query_status('review', account, projects, date_from, date_to),
+                'stream': self._query_stream(account, projects, date_from, date_to),
+                'workon': self._query_workon(account, projects, date_from, date_to),
             }
 
         return history
 
-    def _active(self, account, projects, date_from, date_to):
-        """Gets active issues."""
+    def _query_status(self, action, account, projects, date_from, date_to):
+        """Gets issues in status."""
+        actions = {
+            'active': 'WAS "In progress"',
+            'review': 'CHANGED FROM "Code review"',
+        }
+
         issues = self._jira.search_issues(
             (
                 'project IN (%(projects)s) '
-                'AND status WAS "In Progress" BY "%(account)s" '
+                'AND status %(action)s BY "%(account)s" '
                 'DURING ("%(date_from)s", "%(date_to)s") '
             ) % {
                 'projects': ', '.join('"%s"' % x for x in projects),
                 'date_from': date_from.strftime('%Y-%m-%d'),
                 'date_to': date_to.strftime('%Y-%m-%d'),
                 'account': account,
+                'action': actions[action],
             },
             maxResults=100500,
             fields='summary',
@@ -58,7 +65,7 @@ class Collector(object):
 
         return results
 
-    def _stream(self, account, projects, date_from, date_to):
+    def _query_stream(self, account, projects, date_from, date_to):
         """Gets accounts stream."""
         datetime_from = datetime.datetime.combine(date_from, datetime.time.min)
         datetime_to = datetime.datetime.combine(date_to, datetime.time.max)
@@ -89,8 +96,7 @@ class Collector(object):
                 title_target = query(element, 'activity:target/feed:summary/text()')
                 title_object = query(element, 'activity:object/feed:summary/text()')
                 category_term = query(element, 'feed:category/@term')
-                category_actions = {'comment': 'comment',
-                                    'Code review': 'review'}
+                category_actions = {'comment': 'comment'}
 
                 if category_term in category_actions:
                     results.append({
@@ -101,7 +107,7 @@ class Collector(object):
 
         return results
 
-    def _workon(self, account, projects, date_from, date_to):
+    def _query_workon(self, account, projects, date_from, date_to):
         """Gets work log issues."""
         issues = self._jira.search_issues(
             (

@@ -66,6 +66,7 @@ class Reporter(object):
         for account in accounts:
             chain = itertools.chain(
                 history.get(account, {}).get('active', []),
+                history.get(account, {}).get('review', []),
                 history.get(account, {}).get('stream', []),
                 history.get(account, {}).get('workon', []),
             )
@@ -86,6 +87,7 @@ class Reporter(object):
         for account in accounts:
             operations[account] = account_ops = collections.OrderedDict()
             self._represent_active(account_ops, get_store('active'))
+            self._represent_review(account_ops, get_store('review'))
             self._represent_stream(account_ops, get_store('stream'))
             self._represent_workon(account_ops, get_store('workon'))
 
@@ -95,6 +97,11 @@ class Reporter(object):
         for info in self._sort_by_key(active):
             task_ops = account_ops.setdefault(info['key'], [])
             task_ops.append(self.translations.get('active', 'active'))
+
+    def _represent_review(self, account_ops, review):
+        for info in self._sort_by_key(review):
+            task_ops = account_ops.setdefault(info['key'], [])
+            task_ops.append(self.translations.get('review', 'review'))
 
     def _represent_stream(self, account_ops, stream):
         stream = {
