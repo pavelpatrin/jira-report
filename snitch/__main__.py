@@ -103,4 +103,15 @@ class Main(object):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     Main().main()
+=======
+    try:
+        Main().main()
+    except Exception:
+        import sys
+        import ipdb
+
+        etype, evalue, traceback = sys.exc_info()
+        ipdb.post_mortem(traceback)
+>>>>>>> 7c210478b39bddabf5e1fb98c7b29e84a3c868c4

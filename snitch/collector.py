@@ -101,7 +101,7 @@ class Collector(object):
                 if category_term in category_actions:
                     results.append({
                         'key': key_target or key_object,
-                        'title': title_object or title_target,
+                        'title': title_target or title_object,
                         'action': category_actions[category_term],
                     })
 
