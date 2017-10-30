@@ -86,24 +86,28 @@ class Collector(object):
             })
             return (items[0] if items else None) if first else items
 
+        # Mapping of category/@term to mnemonic actions.
+        category_actions = {'comment': 'comment'}
+
         results = []
         stream = lxml.etree.fromstring(response.content)
         for element in query(stream, '/feed:feed/feed:entry', False):
+            category_term = query(element, 'feed:category/@term')
+            if category_term not in category_actions:
+                continue
+
             key_target = query(element, 'activity:target/feed:title/text()')
             key_object = query(element, 'activity:object/feed:title/text()')
             project = utils.split_key(key_target or key_object)[0]
+
             if project in projects:
                 title_target = query(element, 'activity:target/feed:summary/text()')
                 title_object = query(element, 'activity:object/feed:summary/text()')
-                category_term = query(element, 'feed:category/@term')
-                category_actions = {'comment': 'comment'}
-
-                if category_term in category_actions:
-                    results.append({
-                        'key': key_target or key_object,
-                        'title': title_target or title_object,
-                        'action': category_actions[category_term],
-                    })
+                results.append({
+                    'key': key_target or key_object,
+                    'title': title_target or title_object,
+                    'action': category_actions[category_term],
+                })
 
         return results
 
